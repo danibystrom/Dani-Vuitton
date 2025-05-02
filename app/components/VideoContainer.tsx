@@ -140,8 +140,8 @@ export default function VideoContainer() {
             }}
           >
             A seasonless approach to sophistication, the timeless creations from
-            the Men's New Formal Collection embody a sartorial elegance,
-            enhanced with the Maison's signature details and refined styles.
+            the Men&apos;s New Formal Collection embody a sartorial elegance,
+            enhanced with the Maison&apos;s signature details and refined styles.
           </Typography>
         </Box>
       </Box>
