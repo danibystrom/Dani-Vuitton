@@ -1,6 +1,5 @@
 "use client";
 
-// ProductStorage.tsx
 import { useEffect, useState } from "react";
 
 export interface Product {
@@ -23,7 +22,6 @@ export function useLocalStorageProducts(initialProductValue: Product[]) {
   }, []);
 
   const createProduct = async (newProduct: Product) => {
-    // Prepend the new product to the existing list
     const updatedProducts = [...products, newProduct];
     setProducts(updatedProducts);
     localStorage.setItem("products", JSON.stringify(updatedProducts));

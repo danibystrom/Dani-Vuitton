@@ -1,6 +1,5 @@
 "use client";
 
-// ProductContext.tsx
 import { products as mockedProducts } from "@/data";
 import { PropsWithChildren, createContext, useContext } from "react";
 import { Product, useLocalStorageProducts } from "../storage/ProductStorage";

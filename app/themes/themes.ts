@@ -15,11 +15,10 @@ export const theme = createTheme({
     MuiTypography: {
       variants: [
         {
-          // mellan rummet på kläderna och adresse zip
           props: { variant: "body1" },
           style: {
             marginTop: "3px",
-            fontSize: "0.875rem", // mindre textstorlek
+            fontSize: "0.875rem", 
             fontFamily: "'Futura', 'Trebuchet MS', 'Arial', sans-serif",
           },
         },

@@ -8,7 +8,7 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Stepper from "@mui/material/Stepper";
-import React from "react";
+import React, { useEffect } from "react";
 import { useCart } from "../context/CartContext";
 
 import { ThemeProvider } from "@mui/material/styles";
@@ -23,6 +23,14 @@ export default function CheckoutConfirmation() {
     0
   );
 
+  useEffect(() => {
+    const clearLocalStorage = () => {
+      localStorage.removeItem("cart");
+    };
+
+    clearLocalStorage();
+  }, []);
+
   const cartItems = cart.map((item) => (
     <Card key={item.id} sx={{ marginBottom: 2 }}>
       <Grid container>
@@ -30,7 +38,6 @@ export default function CheckoutConfirmation() {
           <CardMedia
             component="img"
             sx={{ objectFit: "contain", width: "65%", height: "100%" }}
-            // witfh är storleke på bilden och height är på
             image={item.image}
             alt={item.title}
           />

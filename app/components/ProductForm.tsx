@@ -1,29 +1,23 @@
 "use client";
 
-// RHF - Hantera tillståndet och uppbyggnaden av dataobjektet som formuläret skapar
-// MUI - Skapa grafik med hjälp av komponenter (presentation)
-// Zod - Validera att användaren skrivit in giltig information
-
-// const isEdit = Boolean(props.product);
-
 import {
   Box,
   Button,
+  Card,
   FormControl,
   FormHelperTextProps,
-  Grid, 
+  Grid,
   TextField,
   ThemeProvider,
-  Typography,
-  Card
+  Typography
 } from "@mui/material";
 import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useProducts } from "../context/ProductContext";
 import { Product } from "../storage/ProductStorage";
 import theme from "../themes/themes";
-import React, { useState } from 'react';
 
 const productSchema = z.object({
   id: z.string(),
@@ -59,7 +53,6 @@ export default function ProductForm({ product }: Props) {
       console.log("SAVE");
 
       if (isEdit) {
-        // If in edit mode, call editProduct instead of createProduct
         editProduct(validatedData);
       } else {
         createProduct(validatedData);
@@ -86,8 +79,6 @@ export default function ProductForm({ product }: Props) {
     <Grid
       component={"form"}
       container
-      // direction="column"
-      // alignItems="center"
       justifyContent="center"
       data-cy="product-form"
     >

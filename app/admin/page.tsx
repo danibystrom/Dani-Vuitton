@@ -1,6 +1,5 @@
 "use client";
 
-// AdminPage.tsx
 import {
   Box,
   Button,
