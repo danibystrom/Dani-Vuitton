@@ -224,7 +224,7 @@ export default function ProductGrid() {
           gap: "1rem",
         }}
       >
-        <StyledButton>Visa Mer</StyledButton>
+        <StyledButton>Show More</StyledButton>
         <KeyboardArrowUpIcon sx={{ fontSize: "1.75rem" }} />
       </Box>
     </Box>

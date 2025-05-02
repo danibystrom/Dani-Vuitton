@@ -8,15 +8,36 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Stepper from "@mui/material/Stepper";
-import React, { useEffect } from "react";
-import { useCart } from "../context/CartContext";
-
 import { ThemeProvider } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
+import { useCart } from "../context/CartContext";
 import { theme } from "../themes/themes";
+
+interface FormData {
+  name?: string;
+  address?: string;
+  zipCode?: string;
+  city?: string;
+  email?: string;
+  phoneNumber?: string;
+}
+
+interface RandomOrderNumberOptions {
+  length: number;
+}
 
 export default function CheckoutConfirmation() {
   const [activeStep, setActiveStep] = React.useState(0);
   const { cart, clearLocalStorage } = useCart();
+  const [ orderNumber, setOrderNumber ] = useState<string>("");
+  const [formData, setFormData] = useState<FormData>({
+    name: "",
+    address: "",
+    zipCode: "",
+    city: "",
+    email: "",
+    phoneNumber: "",
+  });
 
   const TotalCostAll = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
@@ -24,12 +45,40 @@ export default function CheckoutConfirmation() {
   );
 
   useEffect(() => {
-    const clearLocalStorage = () => {
-      localStorage.removeItem("cart");
-    };
+    if (typeof window !== "undefined") {
+      const storedOrderNumber = localStorage.getItem("orderNumber");
+      if (storedOrderNumber) {
+        setOrderNumber(storedOrderNumber);
+      } else {
+        const generateRandomOrderNumber = ({ length }: RandomOrderNumberOptions) => {
+          let result = "";
+          for (let i = 0; i < length; i++) {
+            result += Math.floor(Math.random() * 10);
+          }
+          return result;
+        };
+        const options: RandomOrderNumberOptions = { length: 8 };
+        const newOrderNumber = generateRandomOrderNumber(options);
+        setOrderNumber(newOrderNumber);
+        localStorage.setItem("orderNumber", newOrderNumber); 
+      }
 
-    clearLocalStorage();
-  }, []);
+      const storedFormData = localStorage.getItem("formData");
+      if (storedFormData) {
+        try {
+          const parsedData = JSON.parse(storedFormData);
+          setFormData((prev) => ({
+            ...prev,
+            ...parsedData,
+          }));
+        } catch (error) {
+          console.error("Error parsing formData from localStorage:", error);
+        }
+      }
+
+      clearLocalStorage();
+    }
+  }, [clearLocalStorage]);
 
   const cartItems = cart.map((item) => (
     <Card key={item.id} sx={{ marginBottom: 2 }}>
@@ -60,10 +109,6 @@ export default function CheckoutConfirmation() {
     </Card>
   ));
 
-  React.useEffect(() => {
-    clearLocalStorage();
-  }, []);
-
   const handleNext = () => {
     setActiveStep(activeStep + 1);
   };
@@ -75,19 +120,6 @@ export default function CheckoutConfirmation() {
   interface RandomOrderNumberOptions {
     length: number;
   }
-
-  const generateRandomOrderNumber = ({ length }: RandomOrderNumberOptions) => {
-    let result = "";
-    for (let i = 0; i < length; i++) {
-      result += Math.floor(Math.random() * 10);
-    }
-    return result;
-  };
-
-  const options: RandomOrderNumberOptions = { length: 8 };
-  const orderNumber = generateRandomOrderNumber(options);
-
-  const formData = JSON.parse(localStorage.getItem("formData") || "{}");
 
   return (
     <ThemeProvider theme={theme}>
@@ -141,47 +173,42 @@ export default function CheckoutConfirmation() {
                   Your order number is #{orderNumber} 
                   </Typography>
                   <Typography variant="subtitle1" marginBottom={4}>
-                  We have emailed your order confirmation, and will send you an update when your order has shipped.
-                </Typography>
-                {cartItems}
-                <Typography
-                  style={{
-                    fontSize: "0.950rem",
-                    fontWeight: "bold",
-                    marginBottom: "26px",
-                    marginRight: "25px",
-                    textAlign: "right",
-                    fontFamily: "'Futura', 'Trebuchet MS', 'Arial', sans-serif",
-                  }}
-                >
-                  Totalt: {TotalCostAll} kr
-                </Typography>
-              </React.Fragment>
-              <Typography variant="body1">Namn: {formData.name}</Typography>
-              <Typography variant="body1">
-                Adress: {formData.address}
-              </Typography>
-              <Typography variant="body1">
-                Zipcode: {formData.zipCode}
-              </Typography>
-              <Typography variant="body1">City: {formData.city}</Typography>
-              <Typography variant="body1">Email: {formData.email}</Typography>
-              <Typography variant="body1">
-                Phonenumber: {formData.phoneNumber}
-              </Typography>
-              <React.Fragment>
-                <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                  <Link href="/">
-                    <Button variant="contained" size="small">
-                      Tillbaka till startsidan
-                    </Button>
-                  </Link>
-                </Box>
-              </React.Fragment>
-            </Paper>
-          </Container>
-        </Box>
-      </React.Fragment>
+                    We have emailed your order confirmation, and will send you an
+                    update when your order has shipped.
+                  </Typography>
+                  {cartItems}
+                  <Typography
+                    style={{
+                      fontSize: "0.950rem",
+                      fontWeight: "bold",
+                      marginBottom: "26px",
+                      marginRight: "25px",
+                      textAlign: "right",
+                      fontFamily: "'Futura', 'Trebuchet MS', 'Arial', sans-serif",
+                    }}
+                  >
+                    Totalt: {TotalCostAll} kr
+                  </Typography>
+                </React.Fragment>
+                <Typography variant="body1">Namn: {formData.name || "N/A"}</Typography>
+                <Typography variant="body1">Adress: {formData.address || "N/A"}</Typography>
+                <Typography variant="body1">Zipcode: {formData.zipCode || "N/A"}</Typography>
+                <Typography variant="body1">City: {formData.city || "N/A"}</Typography>
+                <Typography variant="body1">Email: {formData.email || "N/A"}</Typography>
+                <Typography variant="body1">Phonenumber: {formData.phoneNumber || "N/A"}</Typography>
+                <React.Fragment>
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Link href="/">
+                      <Button variant="contained" size="small">
+                        Back to Homepage
+                      </Button>
+                    </Link>
+                  </Box>
+                </React.Fragment>
+              </Paper>
+            </Container>
+          </Box>
+        </React.Fragment>
       </Box>
     </ThemeProvider>
   );

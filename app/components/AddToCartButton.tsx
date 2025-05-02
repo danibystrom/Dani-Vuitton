@@ -49,7 +49,7 @@ function AddToCartButton({
             }}
           >
             <Typography sx={{ color: "white", fontWeight: "700" }}>
-              Lägg till i kundvagn
+              Add to cart
             </Typography>
           </Button>
         ) : (
@@ -62,7 +62,7 @@ function AddToCartButton({
               sx={{ color: "#3b3b3b", fontWeight: "400" }}
               fontSize={{ xs: "0.60rem", sm: "0.65rem", md: "0.75rem" }}
             >
-              Lägg till i kundvagn
+              Add to cart
             </Typography>
           </Button>
         )}
