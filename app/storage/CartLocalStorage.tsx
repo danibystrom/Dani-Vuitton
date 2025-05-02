@@ -6,18 +6,25 @@ export function useLocalStorageCart(initialValue: CartItem[]) {
   const [cart, setCart] = useState<CartItem[]>(initialValue);
 
   useEffect(() => {
-    const storedCart = localStorage.getItem("cart");
-    if (storedCart) {
-      setCart(JSON.parse(storedCart));
+    if (typeof window !== "undefined") {
+      const storedCart = localStorage.getItem("cart");
+      if (storedCart) {
+        setCart(JSON.parse(storedCart));
+      }
     }
   }, []);
 
   const saveCartToLocalStorage = (updatedCart: CartItem[]) => {
-    localStorage.setItem("cart", JSON.stringify(updatedCart));
+    if (typeof window !== "undefined") {
+      localStorage.setItem("cart", JSON.stringify(updatedCart));
+    }
   };
 
   const clearLocalStorage = () => {
-    localStorage.removeItem("cart");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("cart");
+    }
+    setCart([]);
   };
 
   const removeFromCart = (productId: string, size: string) => {
